@@ -246,16 +246,6 @@ LangSmith one-click deploy is not the only option. Here's how to think about it:
 
 You can deploy LangGraph locally for free — anytime you use cloud compute, you have to pay somebody. It's up to you to decide whether to pay LangSmith directly or manage your own infrastructure.
 
-# 👀 Looking Ahead
-
-This session kicks off the production phase of the course. Here's what's coming:
-
-| Session | Topic |
-|---|---|
-| **16** | **LLM Servers** — Deploying open-source models (local + Fireworks AI). Set up a Fireworks AI account before next class! |
-| **17** | **MCP Servers** — Building tools that agents can use, agent-to-agent protocol, agent meshes |
-| **18** | **Production Optimization** — Cost optimization, caching, guardrails, and other layers that matter once you're in users' hands |
-
 ---
 
 Do you have any questions about how to best prepare for Session 15 after reading? Please don't hesitate to provide direct feedback to `jacob@aimakerspace.io` or `Jacops` on Discord!
