@@ -155,7 +155,13 @@ Why is OAuth important for MCP servers, and what security considerations should 
 
 #### Answer
 
-_(insert your answer here)_
+Why OAuth for MCP 
+Oauth is important because it provides the user a way to allow the the agent access to a governed resource (the cat stop cart) act on my behalf... and can do so without giving the agent a password. In this example the user approves → client gets token → tools use token to identify user
+
+Security considerations 
+- Revocation: Tokens can be revoked if a client is compromised, access can be cut off
+- Expiry: Access tokens expire (~1 hour); limits damage from a leaked token
+- Explicit access: The /login page ensures human approval, important when LLM might act autonomously
 
 ### Question #2
 
@@ -163,7 +169,19 @@ What is Streamable HTTP transport in MCP, and why might you expose a server publ
 
 #### Answer
 
-_(insert your answer here)_
+What is Streamable HTTP transport in MCP
+
+Communicating with an MCP server comes down to 2 fundamental things
+1. what is said (e.g. protocol) — JSON-RPC messages: initialize, tools/list, tools/call…
+2. how the message is carried (e.g. transport) - Transport breaks down into 2 basic approaches for interacting with local and remote mcp servers
+ a. stdio (local mcp server) - mcp server runs on local machine (and as such may not require oauth depending on the org.  Client writes JSON-RPC to the process's stdin, reads stdout
+ b. Streamable HTTP (remote mcp server) - One endpoint is exposed (commonly /mcp). The client POSTs messages across the network using JSON-RPC over HTTP, although there can be a long lived connection
+
+
+why might you expose a server publicly with OAuth instead of using a local stdio connection?
+- It might be exposed publicly... not over the internet, but likely "network accessible" for shared use within an organization
+- with public shared use it would use oauth to ensure resource usage isn't anonymous (particularly the ones that mutated data)
+
 
 ## Activity 1: Extend the MCP Server
 
