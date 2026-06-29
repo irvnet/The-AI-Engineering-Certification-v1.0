@@ -76,6 +76,13 @@ async def init_db(db: aiosqlite.Connection):
             token TEXT PRIMARY KEY,
             username TEXT NOT NULL
         );
+        CREATE TABLE IF NOT EXISTS orders (
+            order_id TEXT PRIMARY KEY,
+            username TEXT NOT NULL,
+            total REAL NOT NULL,
+            created_at REAL NOT NULL,
+            items_json TEXT NOT NULL
+        );
         """
     )
 
