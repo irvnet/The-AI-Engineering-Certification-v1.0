@@ -428,7 +428,10 @@ Why does LangSmith deploy your agent as an API backend only, and why do you stil
 
 #### Answer
 
-_(insert your answer here)_
+The agent and a web UI are different workloads with different purpose-built runtimes. 
+- LangSmith is a runtime for serving agents — it hosts the Python graph, exposes  threads API with tracing — but it doesn't serve a static web content. 
+- Vercel is the runtime for front end apps such as a  UI built with Next.js as well as static content and api proxy. 
+- seperating the deployment lets each service run in an environment optimized for its needs and lets them scale independently, while still letting the front end talk to the back end via the agents api
 
 ### Question #2
 
@@ -436,7 +439,8 @@ Why should the LangSmith API key live in a Next.js API route (server-side) inste
 
 #### Answer
 
-_(insert your answer here)_
+The LangSmith API key is a secret and should only be accessible by services that require it to function. If the client has access to the secret, there's a much greater risk a user can steal the secret from the client since anything in the javascript is visible in devtools-> network tab of the browser (and possibly use the api key for themselves and run up your bill)...  Its less of a concern if the front end only accesses the back end through the api and  only the back end has access ot the secret
+
 
 ## Activity 1: Build a Helpfulness Loop in Production
 
