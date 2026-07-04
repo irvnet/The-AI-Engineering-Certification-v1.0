@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from app.tools import get_tool_belt
 from app.state import MessagesState
-from app.models import get_chat_model, fix_tool_calls
+from app.models import get_chat_model
 from langgraph.prebuilt import ToolNode, tools_condition
 from langgraph.graph import END, START, StateGraph
 
@@ -29,7 +29,7 @@ def call_model(state: MessagesState) -> dict:
     """Invoke the model with the accumulated messages and append its response."""
     model = _build_model_with_tools()
     messages = state["messages"]
-    response = fix_tool_calls(model.invoke(messages))
+    response = model.invoke(messages)
     return {"messages": [response]}
 
 def build_graph():
