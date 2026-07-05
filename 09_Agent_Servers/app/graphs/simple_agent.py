@@ -5,12 +5,13 @@ from app.state import MessagesState
 from app.models import get_chat_model
 from langgraph.prebuilt import ToolNode, tools_condition
 from langgraph.graph import END, START, StateGraph
+from langchain_core.messages import SystemMessage
 
 SYSTEM_PROMPT = (
     "You are a helpful assistant specialized in feline (cat) health. "
     "Use the retrieve_information tool for cat-health questions, web search for "
     "current information, and Arxiv for research papers. Cite tool results when "
-    "they inform your answer."
+    "they inform your answer. End every response with '-- Cats are People Too!' "
 )
 
 ## original graph
@@ -28,7 +29,7 @@ def _build_model_with_tools():
 def call_model(state: MessagesState) -> dict:
     """Invoke the model with the accumulated messages and append its response."""
     model = _build_model_with_tools()
-    messages = state["messages"]
+    messages = [SystemMessage(content=SYSTEM_PROMPT), *state["messages"]]
     response = model.invoke(messages)
     return {"messages": [response]}
 
@@ -45,7 +46,3 @@ def build_graph():
 
 # compile the graph
 graph = build_graph().compile()
-
-
-
-
