@@ -446,8 +446,64 @@ The LangSmith API key is a secret and should only be accessible by services that
 
 Build an `agent_with_helpfulness` graph that adds a post-response helpfulness check: after the agent answers, a judge model decides whether the response is helpful, and if not, the graph loops back for another attempt (with a safe loop limit). Register it in `langgraph.json`, deploy it, then compare LangSmith traces for queries that pass vs. fail the helpfulness check. Does the retry loop behave differently in Studio vs. production?
 
+### Required output
+
+Use this checklist before submitting Activity 1:
+
+- [ ] `app/graphs/agent_with_helpfulness.py` — explicit graph with agent, tools, helpfulness judge, and loop guard
+- [ ] Registered in `langgraph.json` under `"graphs"`
+- [ ] Tested locally in LangGraph Studio (`agent_with_helpfulness`)
+- [ ] At least one **pass** example (judge → `HELPFULNESS:Y` → END)
+- [ ] At least one **retry** example (judge → `HELPFULNESS:N` → agent loops)
+- [ ] LangSmith trace link(s) or exported run data for pass vs fail/retry
+- [ ] Short write-up below (findings + Studio vs production note)
+- [ ] Deployed agent (LangSmith, EC2, or documented local-only plan for Loom)
+
+### Findings
+
+Here's a summary of finidngs from Studio runs and LangSmith traces:
+
+#### Pass example (helpful on first or second try)
+- **Prompt:** use retrieval to find out how often i should deworm my cat
+- **Graph path:** (e.g. action → agent → helpfulness → agent → END)
+- **Judge result:** (`HELPFULNESS:N`, 1 retry, then  `HELPFULNESS:END`)
+- **LangSmith trace:** https://smith.langchain.com/public/230b1f0d-12fd-4e9b-a102-4d2f38659160/r/019f2fdb-2502-7b41-b92d-d40ac9664018
+- **Notes:**
+
+
+#### Fail / retry example
+- **Prompt:** wheres the ny public library?, use retrieval
+- **Graph path:**  agent → helpfulness → agent → helpfulness → END
+- **Judge result:** HELPFULNESS:END
+- **LangSmith trace:** https://smith.langchain.com/public/230b1f0d-12fd-4e9b-a102-4d2f38659160/r/019f2fdc-79bb-7f51-845e-3c10ef54e3a2
+- **Notes:** found the answer using tools (tavily web search) but entirely off topic. 
+
+#### Off-topic or edge case (optional)
+- **Prompt:**wheres the ny public library?, use retrieval
+- **Agent behavior:**  answered anyway
+- **Judge behavior:**  no judgement, HELPFULNESS:END
+- **LangSmith trace:** https://smith.langchain.com/public/230b1f0d-12fd-4e9b-a102-4d2f38659160/r/019f2fdc-79bb-7f51-845e-3c10ef54e3a2
+- **Notes:** may need to adjust the prompt to stay on topic, or have a decision node determine if the topic is in scope and if any further action should be taken
+
+
+
+#### Studio vs production
+
+Does the retry loop behave differently in Studio vs production?
+- I don't expect the retry loop to behave differently... if behavior changes due to environment change (e.g. same logic, same data, different enviornment) then there's an enviornmental bug that needs to be identified. 
+- Solution shouldn't behave differently migrating across dev -> staging -> prodcution environments.
+
+#### Lessons learned
+
+What did the helpfulness loop add (cost, latency, quality)?
+- Using the judge is comparatively expensive is ~ $0.0006 retrieval total vs the judge costing $0.0028 cents. I'd be interested in how the role of the judge impacts/improves outcomes for users over several thousand user requests... assuming that if it only costs $0.0028 to buy a trusted answer then it may be worth it... 
+
+Anything you would change? (judge prompt, loop limit, which message counts as "initial query", etc.)
+- loop limit to control costs
+- better determinism in the graph to ensure answers the judge says aren't helpful are reretrieved, possibly with a different approach and improved with the best version being returned to the user
+- graph should check if it needs the model first (e.g. on/off topic?) before attempting to use the model
+
 ## Advanced Activity: Auth and Custom Routes
 
 Research [LangSmith Deployments custom routes](https://github.com/langchain-samples/lsd-custom-route-react-ui) and describe how you could add authentication so each user only sees their own threads. Optionally implement a simple auth gate on your Vercel frontend.
 
-Include your findings and a demo in your Loom video.
