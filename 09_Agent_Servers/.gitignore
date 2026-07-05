@@ -23,5 +23,12 @@ frontend/.vercel/
 frontend/.env*.local
 frontend/next-env.d.ts
 
+# Terraform
+provision/.terraform/
+provision/*.tfstate
+provision/*.tfstate.*
+provision/terraform.tfvars
+provision/crash.log
+
 # OS / editor
 .DS_Store
