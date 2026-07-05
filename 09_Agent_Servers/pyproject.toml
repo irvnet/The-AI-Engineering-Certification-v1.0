@@ -21,3 +21,11 @@ dependencies = [
     "arxiv>=2.1.0",
     "python-dotenv>=1.2.2",
 ]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
