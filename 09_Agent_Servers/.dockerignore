@@ -1,0 +1,23 @@
+# Not part of the Python agent package
+frontend/
+ami/
+provision/
+
+# Local dev / infra artifacts
+.git/
+.cursor/
+.venv/
+.langgraph_api/
+**/__pycache__/
+**/*.py[cod]
+.env
+.env.*
+*.tfstate
+*.tfstate.*
+
+# Node / Next.js
+**/node_modules/
+**/.next/
+
+# Terraform provider cache
+**/.terraform/
