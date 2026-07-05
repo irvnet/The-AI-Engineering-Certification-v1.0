@@ -78,7 +78,7 @@ In addition to tools from earlier sessions, you will need:
 
 ## Quick Command Reference
 
-Two servers run **locally** (the agent API and the frontend), and two things deploy **online** (the agent to LangSmith, the frontend to Vercel). Run commands from `09_Agent_Servers/` unless noted. The detailed walkthrough for each step is in Parts 1–4 below.
+Two servers run **locally** (the agent API and the frontend), and two things deploy **online** (the agent to EC2, the frontend to Vercel). See **[DEPLOY.md](./DEPLOY.md)** for the full production walkthrough. Run commands from `09_Agent_Servers/` unless noted. Parts 1–4 below cover local development and the LangSmith/Vercel assignment path.
 
 ### Run locally
 
@@ -102,6 +102,8 @@ npm run dev                        # chat UI at http://localhost:3000
 Open `http://localhost:3000` and chat. The browser hits the Next.js `/api` proxy, which forwards to your local agent server.
 
 ### Deploy online
+
+See **[DEPLOY.md](./DEPLOY.md)** for EC2 + custom AMI (this project's path). For LangSmith Plus cloud deploy:
 
 **3. Agent → LangSmith** (push your repo to GitHub first; run from `09_Agent_Servers/`)
 
@@ -507,3 +509,13 @@ Anything you would change? (judge prompt, loop limit, which message counts as "i
 
 Research [LangSmith Deployments custom routes](https://github.com/langchain-samples/lsd-custom-route-react-ui) and describe how you could add authentication so each user only sees their own threads. Optionally implement a simple auth gate on your Vercel frontend.
 
+---
+
+## Deployment
+
+Production deployment (Packer AMI, EC2 + Terraform, Vercel frontend) is documented in **[DEPLOY.md](./DEPLOY.md)**.
+
+- Building the Cat Health Agent v1.0.0 AMI
+- Provisioning the agent API on EC2
+- Deploying the Next.js frontend to Vercel
+- Environment variables, assistant UUIDs, and teardown
