@@ -40,7 +40,25 @@ flowchart LR
   LangSmith --> Traces[LangSmith tracing & evals]
 ```
 
-> **Important:** LangSmith deploys your agent as an **API backend only**. It does not serve a frontend. Vercel hosts the UI; LangSmith hosts the agent.
+**Two deployment paths for the agent API**
+
+| Path | Agent host | Docs |
+|------|------------|------|
+| **LangSmith Plus** (course default) | `langgraph deploy` → LangSmith cloud | Parts 2–4 below |
+| **Self-hosted EC2** (this repo’s Packer + Terraform stack) | Custom AMI + `langgraph up` on EC2 | **[DEPLOY.md](./DEPLOY.md)** |
+
+Both paths use the same Vercel frontend pattern: browser → Next.js `/api` proxy → agent API. LangSmith tracing works in either case.
+
+```mermaid
+flowchart LR
+  User[User in browser] --> Vercel[Next.js on Vercel]
+  Vercel -->|"/api proxy"| EC2[EC2 Elastic IP]
+  EC2 --> Docker[langgraph up / Docker]
+  Docker --> Agent[agent_with_helpfulness]
+  Agent --> Traces[LangSmith traces]
+```
+
+> **Important:** LangSmith deploys your agent as an **API backend only**. It does not serve a frontend. Vercel hosts the UI; LangSmith or your EC2 host runs the agent.
 
 ## Main Assignment
 
@@ -103,33 +121,42 @@ Open `http://localhost:3000` and chat. The browser hits the Next.js `/api` proxy
 
 ### Deploy online
 
-See **[DEPLOY.md](./DEPLOY.md)** for EC2 + custom AMI (this project's path). For LangSmith Plus cloud deploy:
+**Self-hosted (EC2 + AMI):** follow the ordered checklist in **[DEPLOY.md](./DEPLOY.md)** — Packer → Terraform → EC2 bootstrap → Vercel. See also [`ami/README.md`](ami/README.md) and [`provision/README.md`](provision/README.md).
+
+**LangSmith Plus cloud deploy:**
 
 **3. Agent → LangSmith** (push your repo to GitHub first; run from `09_Agent_Servers/`)
 
 ```bash
 uv run langgraph deploy            # LangSmith cloud build + host (requires LangSmith Plus)
-# or self-host in Docker on your own VPS instead:
-uv run langgraph up
 ```
 
 Then copy the **Deployment URL** and **LangSmith API key** from the LangSmith Deployments tab.
 
-**4. Frontend → Vercel** (run from `frontend/`)
+**4. Frontend → Vercel** (run from `frontend/` — same for both agent paths)
 
 ```bash
-npm install -g vercel              # install the Vercel CLI (first time only)
-cd frontend
-vercel                             # first run links/creates the project (preview deploy)
-vercel --prod                      # production deploy
+npm install                        # first time only
+npx vercel                         # link project; note the **Aliased** production URL
+npx vercel --prod
 ```
 
-Set these in the Vercel project (Settings → Environment Variables, or `vercel env add`), then run `vercel --prod` again:
+Set these in the Vercel project (Settings → Environment Variables). **Redeploy after setting `NEXT_PUBLIC_*`.** See **[DEPLOY.md](./DEPLOY.md)** for EC2-specific values and troubleshooting.
+
+**LangSmith agent:**
 
 ```text
 LANGGRAPH_API_URL=https://your-deployment.us.langgraph.app
 LANGSMITH_API_KEY=lsv2_pt_...
-NEXT_PUBLIC_API_URL=https://your-app.vercel.app/api
+NEXT_PUBLIC_API_URL=https://your-aliased-app.vercel.app/api
+```
+
+**Self-hosted EC2 agent** (port from EC2 systemd unit — not the Terraform `agent_api_url` output):
+
+```text
+LANGGRAPH_API_URL=http://<elastic-ip>:<agent-port>
+LANGSMITH_API_KEY=lsv2_pt_...
+NEXT_PUBLIC_API_URL=https://your-aliased-app.vercel.app/api
 ```
 
 ## Setup
@@ -515,7 +542,18 @@ Research [LangSmith Deployments custom routes](https://github.com/langchain-samp
 
 Production deployment (Packer AMI, EC2 + Terraform, Vercel frontend) is documented in **[DEPLOY.md](./DEPLOY.md)**.
 
+| Doc | Contents |
+|-----|----------|
+| **[DEPLOY.md](./DEPLOY.md)** | Ordered checklist, EC2 bootstrap, Vercel env vars, troubleshooting, teardown |
+| **[ami/README.md](./ami/README.md)** | Packer build, image contents, systemd unit |
+| **[provision/README.md](./provision/README.md)** | Terraform stack, outputs, teardown |
+| **[frontend/README.md](./frontend/README.md)** | Local dev, Vercel deploy, key files |
+
+Highlights:
+
 - Building the Cat Health Agent v1.0.0 AMI
-- Provisioning the agent API on EC2
-- Deploying the Next.js frontend to Vercel
-- Environment variables, assistant UUIDs, and teardown
+- Provisioning the agent API on EC2 (network + SSH bootstrap)
+- Deploying the Next.js frontend to Vercel (Aliased URL, absolute `NEXT_PUBLIC_API_URL`)
+- Assistant UUIDs, LangSmith traces, known helpfulness UI behavior
+- Troubleshooting (`Invalid URL`, `Failed to fetch`, build errors)
+- Teardown and optional hardening
