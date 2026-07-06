@@ -492,22 +492,21 @@ Use this checklist before submitting Activity 1:
 
 Here's a summary of finidngs from Studio runs and LangSmith traces:
 
-#### Pass example (helpful on first or second try)
-- **Prompt:** use retrieval to find out how often i should deworm my cat
-- **Graph path:** (e.g. action → agent → helpfulness → agent → END)
-- **Judge result:** (`HELPFULNESS:N`, 1 retry, then  `HELPFULNESS:END`)
-- **LangSmith trace:** https://smith.langchain.com/public/230b1f0d-12fd-4e9b-a102-4d2f38659160/r/019f2fdb-2502-7b41-b92d-d40ac9664018
-- **Notes:**
+#### Pass example — production (EC2 + Vercel)
+- **Prompt:** What vaccinations do kittens need?
+- **Graph path:** agent → retrieve_information → agent → helpfulness → END
+- **Judge result:** `HELPFULNESS:Y` (first check, no retry)
+- **LangSmith trace:** https://smith.langchain.com/public/35ec9d62-7d54-4f22-8acd-5a94a64c0b48/r/019f39bb-6910-7492-8b8f-fc24d9237e1f
+- **Notes:** On-topic cat-health question; RAG retrieval used; judge passed immediately. Same graph behavior as Studio, via self-hosted production stack.
 
-
-#### Fail / retry example
+#### Fail / retry example (local)
 - **Prompt:** wheres the ny public library?, use retrieval
 - **Graph path:**  agent → helpfulness → agent → helpfulness → END
 - **Judge result:** HELPFULNESS:END
 - **LangSmith trace:** https://smith.langchain.com/public/230b1f0d-12fd-4e9b-a102-4d2f38659160/r/019f2fdc-79bb-7f51-845e-3c10ef54e3a2
 - **Notes:** found the answer using tools (tavily web search) but entirely off topic. 
 
-#### Off-topic or edge case (optional)
+#### Off-topic or edge case (local)
 - **Prompt:**wheres the ny public library?, use retrieval
 - **Agent behavior:**  answered anyway
 - **Judge behavior:**  no judgement, HELPFULNESS:END
