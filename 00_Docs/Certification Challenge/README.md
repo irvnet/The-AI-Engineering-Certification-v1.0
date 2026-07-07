@@ -29,7 +29,7 @@ And this is what the Certification challenge is all about - putting **your skill
 
 During our last cohort, here is how the numbers shook out. It took an average of 24.7 hours for people to complete the challenge.
 
-![image.png](/image.png)
+![image.png](image.png)
 
 It’s very much worth considering that the kind of AI Engineering work we’re doing; that is, scoping a problem, creating a solution to that problem that solves a specific pain point for real customers or stakeholders, and engineering it for scale from day 1, is extremely valuable work.
 
