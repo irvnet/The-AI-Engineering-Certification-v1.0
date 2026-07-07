@@ -16,10 +16,8 @@ It all starts now, with the Certification Challenge, which is the next step towa
 
 **Your Certification Challenge is due Tuesday, July 14th.**
 
-<aside>
-💡
-
-Remember, *you know enough already to be dangerous*. You already know enough of the concepts and code you need to build, ship, and share production AI applications! 
+>[!Note]
+💡Remember, *you know enough already to be dangerous*. You already know enough of the concepts and code you need to build, ship, and share production AI applications! 
 
 </aside>
 
@@ -68,15 +66,11 @@ Once you know the problem to be solved, you must be capable of guiding your team
 
 **What** problem do you want to solve?  **Who** is it a problem for?
 
-<aside>
-📝
-
-Task 1: Articulate the problem and the user of your application
-
-*Hints:* 
-
-- First read [Concrete Startup Idea](https://docs.google.com/document/d/1hgI39NNFhMibVONUJJyKrMK4XLF4H32t6m4ob07uG7k/edit?tab=t.0) from the AI Fund.
-- *What is the user’s job title, and what is the part of their job function that you’re trying to automate?*
+>[!TIP]
+>📝 Task 1: Articulate the problem and the user of your application\
+>*Hints:*
+>- First read [Concrete Startup Idea](https://docs.google.com/document/d/1hgI39NNFhMibVONUJJyKrMK4XLF4H32t6m4ob07uG7k/edit?tab=t.0) from the AI Fund.
+>- *What is the user’s job title, and what is the part of their job function that you’re trying to automate?*
 </aside>
 
 **✅ Deliverables**
@@ -99,15 +93,11 @@ Now that you’ve defined a problem and a user, *there are many possible solutio
 
 Choose one, and articulate it.
 
-<aside>
-📝
-
-Task 2: Articulate your proposed solution
-
-*Hint:*  
-
-- *Recall the [LLM Application stack](https://a16z.com/emerging-architectures-for-llm-applications/) we’ve discussed*
-- What architectural decisions do you need to make, and what tradeoffs come with those decisions?
+>[!TIP]
+>📝Task 2: Articulate your proposed solution\
+*Hint:*
+>- *Recall the [LLM Application stack](https://a16z.com/emerging-architectures-for-llm-applications/) we’ve discussed*
+>- What architectural decisions do you need to make, and what tradeoffs come with those decisions?
 </aside>
 
 **✅ Deliverables**
@@ -151,15 +141,11 @@ Requirements:
 1. Your own personal data, uploaded to your application (e.g., RAG)
 2. The ability to search publicly available data (e.g., a simple agentic search tool like [Tavily](https://tavily.com/))
 
-<aside>
-📝
-
-Task 3: Collect your own data (RAG) and choose at least one external API to use (Agent)
-
+>[!TIP]
+>📝 Task 3: Collect your own data (RAG) and choose at least one external API to use (Agent)  
 *Hint:*  
-
-- *Ask other real people (ideally the people you’re building for!) what they think.*
-- *What are the specific questions that your user is likely to ask of your application?  **Write these down**.*
+>- *Ask other real people (ideally the people you’re building for!) what they think.*
+>- *What are the specific questions that your user is likely to ask of your application?  **Write these down**.*
 </aside>
 
 **✅ Deliverables**
@@ -169,10 +155,8 @@ Task 3: Collect your own data (RAG) and choose at least one external API to use 
 
 # Task 4: Building an End-to-End Agentic RAG Prototype
 
-<aside>
-📝
-
-Task 4: Build an end-to-end Agentic RAG application using a production-grade stack and your choice of commercial off-the-shelf model(s)
+>[!TIP]
+>📝Task 4: Build an end-to-end Agentic RAG application using a production-grade stack and your choice of commercial off-the-shelf model(s)
 
 </aside>
 
@@ -185,10 +169,8 @@ Task 4: Build an end-to-end Agentic RAG application using a production-grade sta
 
 **You are an AI Evaluation & Performance Engineer.**  The AI Systems Engineer who built the initial RAG system has asked for your help and expertise in creating an evaluation harness.
 
-<aside>
-📝
-
-Task 5: Prepare a test data set (either by generating synthetic data or by assembling an existing dataset) to baseline an initial evaluation.
+>[!TIP]
+>📝Task 5: Prepare a test data set (either by generating synthetic data or by assembling an existing dataset) to baseline an initial evaluation.
 
 </aside>
 
@@ -202,10 +184,8 @@ Task 5: Prepare a test data set (either by generating synthetic data or by assem
 
 **You are an AI Systems Engineer.**  The AI Evaluation and Performance Engineer has asked for your help in making stepwise improvements to the application. You will work together with them on this task.
 
-<aside>
-📝
-
-Task 6: Install an advanced retriever of your choosing in our Agentic RAG application. 
+>[!TIP]
+>📝Task 6: Install an advanced retriever of your choosing in our Agentic RAG application. 
 
 </aside>
 
