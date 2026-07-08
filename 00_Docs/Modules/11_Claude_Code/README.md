@@ -1,4 +1,4 @@
-# Session 13: ⚙️ Claude Code & Claude Agent SDK
+# Session 11: ⚙️ Claude Code & Claude Agent SDK
 
 🎯 Learn how to use Claude Code and how to work with a new agent orchestration framework: Claude Agent SDK
 
