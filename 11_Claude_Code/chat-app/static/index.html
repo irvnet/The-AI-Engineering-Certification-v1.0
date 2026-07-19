@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chat</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main class="chat">
+      <header class="chat__header">
+        <h1>Chat</h1>
+      </header>
+
+      <div id="messages" class="messages" aria-live="polite"></div>
+
+      <form id="composer" class="composer" autocomplete="off">
+        <input
+          id="input"
+          class="composer__input"
+          type="text"
+          name="message"
+          placeholder="Type a message…"
+          aria-label="Message"
+          required
+        />
+        <button id="send" class="composer__send" type="submit">Send</button>
+      </form>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
