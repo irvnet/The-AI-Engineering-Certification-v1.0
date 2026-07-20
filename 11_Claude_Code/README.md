@@ -66,7 +66,8 @@ While scaffolding in Task 3 you used **plan mode** before letting Claude Code wr
 
 #### ✅ Answer
 
-_(insert your answer here)_
+- An agent that can execute shell commands needs a permission system to limit the blast radius of any mistakes or "misunderstandings" between operator and agent. 
+- Plan mode is valuable partly because it front-loads the design process and gives the operator opportunities to make corrections until the plan is satisfactory, but also because it gives the operator an opportunity to see how the agent will respond and provide additional guidance before allowing the agent to run any commands that could be destructive. 
 
 ### ❓ Question #2
 
@@ -74,7 +75,15 @@ _(insert your answer here)_
 
 #### ✅ Answer
 
-_(insert your answer here)_
+What belongs in CLAUDE.md 
+-  lightweight, high-leverage info the agent shouldn’t have to rediscover every session 
+- depending on location, can be personal preferences (~/.claude/CLAUDE.md) or project-specific (./CLAUDE.md in chat-app/) 
+- For this app includes things like application architecture (to support future code/design changes), how to run, test (uv run uvicorn…, the curl to /api/chat, and that CONCIERGE_REPO_DIR must be set).
+
+What doesn’t belong 
+- facts non-critical or easily readable from the code, the full build spec, long documents or details that go stale quickly 
+- CLAUDE.md is loaded at the start of every session, extra lines permanently consume context and contribute to context rot — the same finite-window problem Session 3 addressed with summarization and /compact, but here we prevent rot up front by managing what’s injected and when more carefully
+- That’s different from conversation memory (Task 7’s conversation_id → SDK session_id): CLAUDE.md is static project memory across Claude Code sessions; session resume is thread memory within a chat. Both manage limited context, but in different areas of the application.
 
 ### ❓ Question #3
 
@@ -82,7 +91,16 @@ The Agent SDK gives you the same agent loop that powers Claude Code. Compare thi
 
 #### ✅ Answer
 
-_(insert your answer here)_
+What you get for free:
+- loops and retries, tools, permissions, MCP, session persistence, compaction
+
+What you give up: 
+- per-iteration control, arbitrary graphs
+
+Observation: 
+- claude sdk gives less visibility and control over the loop steps.. which speeds outcomes but its harder to enforce rigid routing
+- LangGraph lets you directly define nodes, edges, state which gives a more predictable flow. 
+
 
 ### ❓ Question #4
 
@@ -90,7 +108,19 @@ Your chat app could have called a chat completions API directly, the way you did
 
 #### ✅ Answer
 
-_(insert your answer here)_
+What you get: 
+- A chat returns text from the model’s training context, it can’t explore the target repo's tree. 
+- Routing through query() gives you the same tool-using loop as Claude Code: Read, Glob, Grep, plus custom tools like count_lines. 
+- You also get session resume, streaming from the message loop, and governance knobs (allowlist, max_turns) as part of an opinionated harness — less hand-wiring than assembling loops in LangGraph, and the right shape for a codebase concierge behind an HTTP endpoint.
+
+New risks:
+- An agent with tools can read files you didn’t intend, trigger a runaway loop taht burns cost or follow a malicious user prompt if Bash were allowed. 
+- On a headless server there’s no operator approving each tool call
+
+How you addressed it:
+- restricted the agent to a read-only allowlist (Read, Glob, Grep, and explicitly named MCP tools). max_turns=25 caps runaway loops. 
+- didn't give the agent Bash — git_log runs a fixed subprocess I control. 
+- In Claude Code, plan mode was the gate while building; in production the allowlist is the permission model.
 
 ## Activity 1: Level Up the Chat App
 
