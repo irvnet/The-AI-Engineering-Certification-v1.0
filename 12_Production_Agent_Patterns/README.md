@@ -65,7 +65,9 @@ In `01_Cat_Health_Agent_Guardrails.ipynb`, input rails run in a specific order: 
 
 #### ✅ Answer
 
-_(insert your answer here)_
+In production, input rails are cheapest to run first as a cost/latency funnel. Deterministic checks (emergency, injection, PII) are free and certain, so they filter obvious cases before a model-based guard runs. Inputs that fail early never reach the main model, saving tokens and latency.
+
+it serves a similar purpose as custom errors...because what has gone wrong helps determine clearly what action items are in scope and which actions to take (boolean pass/fail can't express what should happen next). Block refuses safely, escalate short-circuits to urgent action, rewrite sanitizes and continues, and allow proceeds — each maps to a different user outcome and loop behavior. A single boolean would force the same response for very different situations.
 
 ### ❓ Question #2
 
@@ -73,7 +75,11 @@ In `02_Cat_Health_Agent_Caching.ipynb`, a semantic cache can serve a paraphrased
 
 #### ✅ Answer
 
-_(insert your answer here)_
+embeddings measure semantic similarity, they don't measure equivalence or urgency/stakes ("My cat ate chocolate" vs "My cat ate chicken")
+If the threshold is lowered → more paraphrase hits, but also more dangerous collisions
+If you raise the threshold → fewer collisions, but you miss legitimate paraphrases (cache becomes useless)
+
+High-stakes queries should skip the semantic cache. The deterministic emergency rail from Notebook 1 is the right gate: if input rails return escalate (or similar), never lookup or store in cache. Guardrails decide what's safe to cache; only low-risk FAQ traffic should use semantic caching, with TTL and per-user scoping as additional bounds.
 
 ## Submitting Your Homework
 
