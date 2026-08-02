@@ -83,7 +83,17 @@ What is the difference between serverless and dedicated endpoints?
 
 #### ✅ Answer:
 
-_(insert your answer here)_
+The difference between serverless / dedicated endpoints
+
+Serverless:
+- compute: serverless uses shared compute vs dedicated having reserved GPU's just for your use
+- Serverless is convenient, and likely best for unpredictable traffic patterns, particularly on the low side (spiky traffic likely from early usage,  experimentation, or simply because that's the natural traffic pattern of the use case)
+- Latency likely varies because its shared resources, depending on 'noisy neighbor issues'
+throughput is presumably capped as well to avoid (as much as possible) noisy neighbors
+- Also easiest to setup since there's little, if anything, to manage
+
+Dedicated:
+Dedicated allows reserving GPU's for inference to avoid the issues of shared resources, likely in response to a better understood, higher volume or more sustained traffic patterns.. or potentially a need for more predictable latency by avoiding noisy neighbors with dedicated resources. It will, however require additional setup to define the infra that supports the expected level of activity.
 
 ### ❓ Question #2:
 
@@ -91,7 +101,13 @@ Why is it important to consider token throughput and latency when choosing an LL
 
 #### ✅ Answer:
 
-_(insert your answer here)_
+The key reason to consider latency and throughput is the user experience. A poor user experience may make an otherwise good solution unusable from the consumers perspective
+Latency 
+- time for user to get a useful response (e.g. time-to-first-token, end to end response time). With high latency, app seems broken even if answers are good
+- Throughput - handling of concurrent requests in a given time period. If users experience queueing, timeouts, or degraded UX, then app seems broekn
+- Bigger models may mean better answers, but at the cost of latency and throughput... 
+
+
 
 ## Activity 1: RAGAS Evaluation with Cost Analysis
 
